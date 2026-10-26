@@ -17,7 +17,7 @@ export class BooksController {
     @Get(':id ')
     getBookById(@Param('id') id: string){  // @Param digunakan untuk mengambil parameter dari URL
         //logic untuk mengambil data buku berdasarkan id dari database
-        return this.bookService.findOne(Number(id));  // mengubah id dari string ke number
+        return this.bookService.findOne((id));  // mengubah id dari string ke number
     }
 
     //menyimpan data buku baru ke database
@@ -35,7 +35,7 @@ export class BooksController {
     ){  
         // @Param digunakan untuk mengambil parameter dari URL, @Body digunakan untuk mengambil data dari body request
         //logic untuk mengupdate data buku berdasarkan id dari database
-        return this.bookService.update(Number(id), book);  // mengubah id dari string ke number
+        return this.bookService.update((id), book);  // mengubah id dari string ke number
     }
 
     //menghapus data buku berdasarkan id
@@ -44,7 +44,7 @@ export class BooksController {
     ){  
         // @Param digunakan untuk mengambil parameter dari URL
         //logic untuk menghapus data buku berdasarkan id dari database
-        return this.bookService.delete(Number(id));  // mengubah id dari string ke number
+        return this.bookService.delete((id));  // mengubah id dari string ke number
     }
 
 }
