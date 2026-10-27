@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { createObserveModule } from '@nestjs/observe';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { BooksModule } from './books/books.module.js';
 import { AuthModule } from './auth/auth.module.js';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import Joi from 'joi';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
@@ -32,6 +33,23 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
         DB_DATABASE: Joi.string().required(),
       }),
     }),
+
+    // konfigurasi orm
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_DATABASE'),
+
+        autoLoadEntities: true,
+
+        synchronize: configService.get<string>('NODE_ENV') == 'development'
+      })
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
